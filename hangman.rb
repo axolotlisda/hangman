@@ -33,8 +33,8 @@ class Game
       puts "\nsaving file..."
       player()
     elsif turn == 'load'
-      load_game()
       puts "\nloading file..."
+      load_game()
       player()
     else
       puts "please put an alphabet\n"
@@ -58,7 +58,13 @@ class Game
   end
 
   def guessed_word()
-    puts "guessed: #{@guessed.to_s.gsub!(',','').gsub!('nil','_')}"
+    # puts "guessed: #{@guessed.to_s.gsub(',','').gsub('nil','_')}"
+    cont = @guessed.each_with_index do |v, i|
+      if @guessed[i].nil? == true
+        @guessed[i] = '_ '
+      end
+    end
+    puts "guessed: #{cont.join}"
   end
 
   def check_word(word, turn)
@@ -85,7 +91,6 @@ class Game
     elsif @used_letter.include?(@turn) == true
       puts "\nYou already used that letter!"
     end
-  
     puts "\nalpha: #{@alpha}"
   end
 
@@ -131,11 +136,13 @@ class Game
     guessed_word()
     puts "\nalpha: #{@alpha}"
     while @lives > 0 do
-        puts "lives #{@lives}"
-        @turn = player
-        check_word(@word, @turn)
-        included?()
-     break if winner?(@guessed, @word) == true
+      if winner?(@guessed, @word) == true
+        break
+      end
+          puts "lives #{@lives}"
+          @turn = player
+          check_word(@word, @turn)
+          included?()
      end
      game_over() if @lives == 0
     end
